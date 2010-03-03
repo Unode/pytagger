@@ -103,6 +103,8 @@ class ID3v1(object):
             return False
 
     def commit(self):
+        self.comment = struct.pack("!28sxb", self.comment, self.track)
+
         id3v1 = struct.pack("!3s30s30s30s4s30sb",
             'TAG',
             self.songname,
@@ -122,6 +124,8 @@ class ID3v1(object):
         self.__f.flush()
 
     def commit_to_file(self, filename):
+        self.comment = struct.pack("!28sxb", self.comment, self.track)
+
         id3v1 = struct.pack("!3s30s30s30s4s30sb",
             'TAG',
             self.songname,
@@ -190,10 +194,9 @@ class ID3v1(object):
         else:
             if comment[28] == '\x00':
                 track = ord(comment[29])
-                comment = comment[0:27]
+                comment = comment[:27]
             else:
                 track = 0
-
                 
             self.__tag["songname"] = self.unpad(songname).strip()
             self.__tag["artist"] = self.unpad(artist).strip()
