@@ -135,7 +135,10 @@ class ID3v1(object):
             self.comment,
             self.genre)
     
-        f = open(filename, 'wb+')
+        # Create the file if non existant
+        open(filename, 'a').close()
+
+        f = open(filename, 'rb+')
         self.__f.seek(0)
         buf = self.__f.read(4096)
         while buf:
@@ -143,7 +146,7 @@ class ID3v1(object):
             buf = self.__f.read(4096)
             
         if self.tag_exists():
-            f.seek(-128, 0)
+            f.seek(-128, 2)
             f.truncate()
         
         f.write(id3v1)
