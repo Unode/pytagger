@@ -154,10 +154,16 @@ class ID3v1(object):
 
     def __setattr__(self, name, value):
         if self.__tag and self.__tag.has_key(name):
-            if name == 'genre' and type(value) != types.IntValue:
-                raise TypeError, "genre should be an integer"
-            if name == 'track' and type(value) != types.IntValue:
-                raise TypeError, "track should be an integer"
+            if name == 'genre':
+                try:
+                    self.__tag[name] = int(value)
+                except ValueError:
+                    raise ValueError, "genre should be an integer"
+            if name == 'track':
+                try:
+                    self.__tag[name] = int(value)
+                except ValueError:
+                    raise ValueError, "track should be an integer"
             if name == 'year':
                 self.__tag[name] = str(value)[:4]
             self.__tag[name] = value
